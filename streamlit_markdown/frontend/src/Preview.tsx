@@ -6,7 +6,7 @@
  */
 
 import React, { useMemo } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
@@ -20,6 +20,19 @@ interface PreviewProps {
   theme: "light" | "dark";
   height: number;
 }
+
+/**
+ * Custom URL transform that allows data URLs (base64 images)
+ * while still applying default security sanitization for other URLs
+ */
+const customUrlTransform = (url: string): string => {
+  // Allow data URLs for embedded images
+  if (url.startsWith("data:")) {
+    return url;
+  }
+  // Use default transform for other URLs (applies security sanitization)
+  return defaultUrlTransform(url);
+};
 
 const Preview: React.FC<PreviewProps> = ({ content, theme, height }) => {
   // Memoize markdown rendering for performance
@@ -36,6 +49,7 @@ const Preview: React.FC<PreviewProps> = ({ content, theme, height }) => {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        urlTransform={customUrlTransform}
         components={{
           // Custom link handling - open in new tab
           a: ({ node, children, href, ...props }) => (
