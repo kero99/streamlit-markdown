@@ -115,9 +115,12 @@ def st_markdown(
     if toolbar is None:
         toolbar = DEFAULT_TOOLBAR.copy()
 
+    # Convert local image paths to base64 for preview display
+    preview_value = _convert_images_to_base64(value) if value else value
+
     # Prepare component args
     component_args = {
-        "defaultValue": value,
+        "defaultValue": preview_value,
         "placeholder": placeholder,
         "height": height,
         "theme": theme,
@@ -133,7 +136,7 @@ def st_markdown(
     component_value = _st_markdown(
         **component_args,
         key=key,
-        default={"content": value, "images": []}
+        default={"content": preview_value, "images": []}
     )
 
     # Handle image uploads if path is specified
@@ -211,6 +214,61 @@ def _save_image(base64_data: str, upload_path: str, filename: str) -> Optional[s
     except Exception as e:
         print(f"Error saving image: {e}")
         return None
+
+
+import re
+import mimetypes
+
+def _convert_images_to_base64(content: str) -> str:
+    """
+    Convert local image paths in markdown to base64 data URLs for preview.
+    
+    Parameters
+    ----------
+    content : str
+        Markdown content that may contain local image paths.
+    
+    Returns
+    -------
+    str
+        Markdown content with local images converted to base64.
+    """
+    if not content:
+        return content
+    
+    # Pattern to match markdown images: ![alt](path)
+    img_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
+    
+    def replace_with_base64(match):
+        alt_text = match.group(1)
+        img_path = match.group(2)
+        
+        # Skip if already a data URL or http URL
+        if img_path.startswith('data:') or img_path.startswith('http://') or img_path.startswith('https://'):
+            return match.group(0)
+        
+        # Try to read the local file
+        try:
+            path = Path(img_path)
+            if path.exists() and path.is_file():
+                # Read and encode to base64
+                image_bytes = path.read_bytes()
+                base64_data = base64.b64encode(image_bytes).decode('utf-8')
+                
+                # Determine MIME type
+                mime_type, _ = mimetypes.guess_type(str(path))
+                if not mime_type:
+                    mime_type = 'image/png'
+                
+                # Return markdown with base64 data URL
+                return f'![{alt_text}](data:{mime_type};base64,{base64_data})'
+        except Exception:
+            pass
+        
+        # Return original if file not found or error
+        return match.group(0)
+    
+    return re.sub(img_pattern, replace_with_base64, content)
 
 
 def get_markdown_content(result: Union[dict, str, None]) -> str:
