@@ -1,0 +1,100 @@
+/* Light Theme Styles */
+.st-markdown-editor.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #ebeef1;
+  --text-primary: #24292f;
+  --text-secondary: #57606a;
+  --text-muted: #8c959f;
+  --border-color: #d0d7de;
+  --accent-color: #0969da;
+  --accent-hover: #0550ae;
+  --code-bg: #f6f8fa;
+  --code-text: #cf222e;
+  --link-color: #0969da;
+  --quote-border: #d0d7de;
+  --selection-bg: #b3d7ff;
+}
+
+.st-markdown-editor.light .toolbar {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.light .toolbar-button {
+  color: var(--text-secondary);
+}
+
+.st-markdown-editor.light .toolbar-button:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.st-markdown-editor.light .toolbar-button.active {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.st-markdown-editor.light .preview-panel {
+  background-color: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.light .preview-panel h1,
+.st-markdown-editor.light .preview-panel h2,
+.st-markdown-editor.light .preview-panel h3 {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.light .preview-panel code {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+}
+
+.st-markdown-editor.light .preview-panel pre {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.light .preview-panel blockquote {
+  border-left: 4px solid var(--quote-border);
+  color: var(--text-secondary);
+}
+
+.st-markdown-editor.light .preview-panel a {
+  color: var(--link-color);
+}
+
+.st-markdown-editor.light .preview-panel table {
+  border-collapse: collapse;
+}
+
+.st-markdown-editor.light .preview-panel th,
+.st-markdown-editor.light .preview-panel td {
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+}
+
+.st-markdown-editor.light .preview-panel th {
+  background-color: var(--bg-secondary);
+}
+
+/* Scrollbar styling for light theme */
+.st-markdown-editor.light ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.st-markdown-editor.light ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.st-markdown-editor.light ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.st-markdown-editor.light ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

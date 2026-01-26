@@ -1,0 +1,118 @@
+/* Dark Theme Styles */
+.st-markdown-editor.dark {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --border-color: #30363d;
+  --accent-color: #58a6ff;
+  --accent-hover: #79c0ff;
+  --code-bg: #161b22;
+  --code-text: #ff7b72;
+  --link-color: #58a6ff;
+  --quote-border: #30363d;
+  --selection-bg: #264f78;
+}
+
+.st-markdown-editor.dark .toolbar {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.dark .toolbar-button {
+  color: var(--text-secondary);
+}
+
+.st-markdown-editor.dark .toolbar-button:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.st-markdown-editor.dark .toolbar-button.active {
+  background-color: var(--accent-color);
+  color: #0d1117;
+}
+
+.st-markdown-editor.dark .preview-panel {
+  background-color: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.dark .preview-panel h1,
+.st-markdown-editor.dark .preview-panel h2,
+.st-markdown-editor.dark .preview-panel h3 {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.dark .preview-panel code {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+}
+
+.st-markdown-editor.dark .preview-panel pre {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.st-markdown-editor.dark .preview-panel blockquote {
+  border-left: 4px solid var(--quote-border);
+  color: var(--text-secondary);
+}
+
+.st-markdown-editor.dark .preview-panel a {
+  color: var(--link-color);
+}
+
+.st-markdown-editor.dark .preview-panel table {
+  border-collapse: collapse;
+}
+
+.st-markdown-editor.dark .preview-panel th,
+.st-markdown-editor.dark .preview-panel td {
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+}
+
+.st-markdown-editor.dark .preview-panel th {
+  background-color: var(--bg-secondary);
+}
+
+/* Scrollbar styling for dark theme */
+.st-markdown-editor.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.st-markdown-editor.dark ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.st-markdown-editor.dark ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.st-markdown-editor.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Additional dark theme enhancements */
+.st-markdown-editor.dark .preview-panel img {
+  opacity: 0.9;
+}
+
+.st-markdown-editor.dark .preview-panel hr {
+  border-color: var(--border-color);
+}
+
+.st-markdown-editor.dark .preview-panel ul,
+.st-markdown-editor.dark .preview-panel ol {
+  color: var(--text-primary);
+}
+
+.st-markdown-editor.dark .preview-panel li::marker {
+  color: var(--text-secondary);
+}

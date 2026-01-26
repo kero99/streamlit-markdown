@@ -1,0 +1,365 @@
+/**
+ * Main CSS styles for Streamlit Markdown Editor
+ */
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Main container */
+.st-markdown-editor {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.st-markdown-editor.light {
+  background-color: #ffffff;
+  border: 1px solid #d0d7de;
+}
+
+.st-markdown-editor.dark {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+}
+
+/* Editor container layout */
+.editor-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-container.right {
+  flex-direction: row;
+}
+
+.editor-container.bottom {
+  flex-direction: column;
+}
+
+.editor-container.tab {
+  flex-direction: column;
+}
+
+/* Editor pane */
+.editor-pane {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.editor-pane.full-width {
+  width: 100%;
+}
+
+.editor-wrapper {
+  height: 100%;
+  overflow: auto;
+}
+
+/* Preview pane */
+.preview-pane {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.editor-container.right .preview-pane {
+  border-left: 1px solid;
+}
+
+.editor-container.bottom .preview-pane {
+  border-top: 1px solid;
+}
+
+.st-markdown-editor.light .preview-pane {
+  border-color: #d0d7de;
+}
+
+.st-markdown-editor.dark .preview-pane {
+  border-color: #30363d;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  padding: 0 8px;
+}
+
+.st-markdown-editor.light .tab-bar {
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.st-markdown-editor.dark .tab-bar {
+  background-color: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.st-markdown-editor.light .tab-button {
+  color: #57606a;
+}
+
+.st-markdown-editor.dark .tab-button {
+  color: #8b949e;
+}
+
+.tab-button:hover {
+  color: inherit;
+}
+
+.st-markdown-editor.light .tab-button:hover {
+  color: #24292f;
+}
+
+.st-markdown-editor.dark .tab-button:hover {
+  color: #c9d1d9;
+}
+
+.tab-button.active {
+  font-weight: 600;
+}
+
+.st-markdown-editor.light .tab-button.active {
+  color: #24292f;
+}
+
+.st-markdown-editor.dark .tab-button.active {
+  color: #c9d1d9;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+}
+
+.st-markdown-editor.light .tab-button.active::after {
+  background-color: #fd8c73;
+}
+
+.st-markdown-editor.dark .tab-button.active::after {
+  background-color: #f78166;
+}
+
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* CodeMirror overrides */
+.cm-editor {
+  height: 100%;
+  font-size: 14px;
+}
+
+.cm-editor .cm-scroller {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Menlo', monospace;
+  line-height: 1.6;
+}
+
+.cm-editor.cm-focused {
+  outline: none;
+}
+
+/* Placeholder styling */
+.cm-editor .cm-placeholder {
+  font-style: italic;
+}
+
+.st-markdown-editor.light .cm-editor .cm-placeholder {
+  color: #8c959f;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-placeholder {
+  color: #484f58;
+}
+
+/* Preview panel base styles */
+.preview-panel {
+  padding: 16px 24px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.preview-panel h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+  padding-bottom: 0.3em;
+  font-weight: 600;
+}
+
+.preview-panel h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+  padding-bottom: 0.3em;
+  font-weight: 600;
+}
+
+.preview-panel h3 {
+  font-size: 1.25em;
+  margin: 1em 0;
+  font-weight: 600;
+}
+
+.preview-panel h4 {
+  font-size: 1em;
+  margin: 1.33em 0;
+  font-weight: 600;
+}
+
+.preview-panel p {
+  margin: 1em 0;
+}
+
+.preview-panel code {
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9em;
+}
+
+.preview-panel pre {
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.preview-panel pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.preview-panel blockquote {
+  margin: 1em 0;
+  padding-left: 16px;
+}
+
+.preview-panel ul,
+.preview-panel ol {
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.preview-panel li {
+  margin: 0.25em 0;
+}
+
+.preview-panel img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.preview-panel a {
+  text-decoration: none;
+}
+
+.preview-panel a:hover {
+  text-decoration: underline;
+}
+
+.preview-panel hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  border: 0;
+}
+
+.st-markdown-editor.light .preview-panel hr {
+  background-color: #d0d7de;
+}
+
+.st-markdown-editor.dark .preview-panel hr {
+  background-color: #30363d;
+}
+
+.preview-panel table {
+  width: 100%;
+  margin: 1em 0;
+}
+
+/* Task list styling */
+.preview-panel input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Empty preview message */
+.preview-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-style: italic;
+}
+
+.st-markdown-editor.light .preview-empty {
+  color: #8c959f;
+}
+
+.st-markdown-editor.dark .preview-empty {
+  color: #484f58;
+}
+
+/* Drag and drop overlay */
+.drop-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.drop-overlay.active {
+  opacity: 1;
+}
+
+.st-markdown-editor.light .drop-overlay {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #0969da;
+  border: 2px dashed #0969da;
+}
+
+.st-markdown-editor.dark .drop-overlay {
+  background-color: rgba(13, 17, 23, 0.9);
+  color: #58a6ff;
+  border: 2px dashed #58a6ff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .editor-container.right {
+    flex-direction: column;
+  }
+  
+  .editor-container.right .preview-pane {
+    border-left: none;
+    border-top: 1px solid;
+  }
+}
