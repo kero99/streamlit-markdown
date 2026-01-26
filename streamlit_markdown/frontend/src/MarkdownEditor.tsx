@@ -11,8 +11,9 @@ import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
 import { EditorView } from "@codemirror/view";
 
-import { MarkdownEditorProps, ComponentValue, ImageUploadData, ThemeMode } from "./types";
-import { getTheme, lightTheme, darkTheme } from "./themes";
+import { MarkdownEditorProps, ComponentValue, ImageUploadData } from "./types";
+import { lightTheme, darkTheme } from "./themes";
+import { imageDecorations } from "./imageDecorations";
 import Toolbar from "./Toolbar";
 import Preview from "./Preview";
 
@@ -192,6 +193,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
     markdown(),
     EditorView.lineWrapping,
     editorTheme,
+    ...imageDecorations,
   ], [editorTheme]);
 
   // Render layout based on preview position
