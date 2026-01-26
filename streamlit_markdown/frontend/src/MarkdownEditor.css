@@ -182,6 +182,57 @@
   outline: none;
 }
 
+/* Dark theme CodeMirror overrides */
+.st-markdown-editor.dark .cm-editor {
+  background-color: #0d1117 !important;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-scroller {
+  background-color: #0d1117 !important;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-content {
+  color: #e6edf3;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-gutters {
+  background-color: #0d1117 !important;
+  color: #6e7681;
+  border-right: 1px solid #30363d;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-activeLineGutter {
+  background-color: #161b22;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-activeLine {
+  background-color: #161b2280;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-cursor {
+  border-left-color: #58a6ff;
+}
+
+.st-markdown-editor.dark .cm-editor .cm-selectionBackground,
+.st-markdown-editor.dark .cm-editor.cm-focused .cm-selectionBackground {
+  background-color: #388bfd40 !important;
+}
+
+/* Light theme CodeMirror overrides */
+.st-markdown-editor.light .cm-editor {
+  background-color: #ffffff;
+}
+
+.st-markdown-editor.light .cm-editor .cm-scroller {
+  background-color: #ffffff;
+}
+
+.st-markdown-editor.light .cm-editor .cm-gutters {
+  background-color: #f6f8fa;
+  color: #8c959f;
+  border-right: 1px solid #d0d7de;
+}
+
 /* Placeholder styling */
 .cm-editor .cm-placeholder {
   font-style: italic;

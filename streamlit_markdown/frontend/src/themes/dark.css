@@ -3,17 +3,17 @@
   --bg-primary: #0d1117;
   --bg-secondary: #161b22;
   --bg-tertiary: #21262d;
-  --text-primary: #c9d1d9;
-  --text-secondary: #8b949e;
-  --text-muted: #484f58;
+  --text-primary: #e6edf3;
+  --text-secondary: #b1bac4;
+  --text-muted: #6e7681;
   --border-color: #30363d;
   --accent-color: #58a6ff;
   --accent-hover: #79c0ff;
-  --code-bg: #161b22;
-  --code-text: #ff7b72;
-  --link-color: #58a6ff;
-  --quote-border: #30363d;
-  --selection-bg: #264f78;
+  --code-bg: #262c36;
+  --code-text: #ffa657;
+  --link-color: #79c0ff;
+  --quote-border: #3b82f6;
+  --selection-bg: #388bfd40;
 }
 
 .st-markdown-editor.dark .toolbar {
@@ -38,6 +38,11 @@
 .st-markdown-editor.dark .preview-panel {
   background-color: var(--bg-primary);
   border-left: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.st-markdown-editor.dark .preview-panel p {
+  color: var(--text-primary);
 }
 
 .st-markdown-editor.dark .preview-panel h1,
@@ -68,15 +73,27 @@
 
 .st-markdown-editor.dark .preview-panel table {
   border-collapse: collapse;
+  width: 100%;
 }
 
 .st-markdown-editor.dark .preview-panel th,
 .st-markdown-editor.dark .preview-panel td {
   border: 1px solid var(--border-color);
   padding: 8px 12px;
+  color: var(--text-primary);
 }
 
 .st-markdown-editor.dark .preview-panel th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.st-markdown-editor.dark .preview-panel td {
+  background-color: var(--bg-primary);
+}
+
+.st-markdown-editor.dark .preview-panel tr:nth-child(even) td {
   background-color: var(--bg-secondary);
 }
 
@@ -115,4 +132,36 @@
 
 .st-markdown-editor.dark .preview-panel li::marker {
   color: var(--text-secondary);
+}
+
+/* Checkbox styling for task lists */
+.st-markdown-editor.dark .preview-panel input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent-color);
+  border-radius: 3px;
+  background-color: var(--bg-primary);
+  cursor: pointer;
+  vertical-align: middle;
+  margin-right: 8px;
+  position: relative;
+}
+
+.st-markdown-editor.dark .preview-panel input[type="checkbox"]:checked {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.st-markdown-editor.dark .preview-panel input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid #0d1117;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }

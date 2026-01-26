@@ -77,64 +77,72 @@ export const lightTheme = EditorView.theme({
 export const darkTheme = EditorView.theme({
   "&": {
     backgroundColor: "#0d1117",
-    color: "#c9d1d9",
+    color: "#e6edf3",
   },
   ".cm-content": {
-    caretColor: "#c9d1d9",
+    caretColor: "#58a6ff",
     fontFamily: "'Fira Code', 'Consolas', 'Monaco', monospace",
     fontSize: "14px",
     lineHeight: "1.6",
   },
   ".cm-cursor": {
-    borderLeftColor: "#c9d1d9",
+    borderLeftColor: "#58a6ff",
+    borderLeftWidth: "2px",
   },
   "&.cm-focused .cm-selectionBackground, .cm-selectionBackground": {
-    backgroundColor: "#264f78",
+    backgroundColor: "#388bfd40",
   },
   ".cm-activeLine": {
-    backgroundColor: "#161b22",
+    backgroundColor: "#161b2280",
   },
   ".cm-gutters": {
     backgroundColor: "#0d1117",
-    color: "#484f58",
+    color: "#6e7681",
     border: "none",
-    borderRight: "1px solid #21262d",
+    borderRight: "1px solid #30363d",
   },
   ".cm-activeLineGutter": {
     backgroundColor: "#161b22",
+    color: "#e6edf3",
   },
   // Markdown syntax highlighting
   ".cm-header": {
-    color: "#58a6ff",
+    color: "#79c0ff",
     fontWeight: "bold",
   },
   ".cm-strong": {
     fontWeight: "bold",
-    color: "#c9d1d9",
+    color: "#e6edf3",
   },
   ".cm-emphasis": {
     fontStyle: "italic",
-    color: "#c9d1d9",
+    color: "#e6edf3",
   },
   ".cm-strikethrough": {
     textDecoration: "line-through",
+    color: "#8b949e",
   },
   ".cm-link": {
-    color: "#58a6ff",
+    color: "#79c0ff",
     textDecoration: "underline",
   },
   ".cm-url": {
-    color: "#58a6ff",
+    color: "#a5d6ff",
   },
   ".cm-code": {
-    backgroundColor: "#161b22",
-    color: "#ff7b72",
+    backgroundColor: "#262c36",
+    color: "#ffa657",
     fontFamily: "'Fira Code', monospace",
+    padding: "2px 4px",
+    borderRadius: "3px",
   },
   ".cm-quote": {
-    color: "#8b949e",
-    borderLeft: "4px solid #30363d",
+    color: "#a5d6ff",
+    borderLeft: "4px solid #3b82f6",
     paddingLeft: "16px",
+  },
+  ".cm-list": {
+    color: "#ff7b72",
   },
 }, { dark: true });
 
