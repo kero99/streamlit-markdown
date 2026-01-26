@@ -18,6 +18,12 @@ A powerful markdown editor component for Streamlit with live preview, dark theme
 pip install streamlit-markdown
 ```
 
+### Install from GitHub
+
+```bash
+pip install git+https://github.com/kero99/streamlit-markdown.git
+```
+
 ## Quick Start
 
 ```python
@@ -166,6 +172,8 @@ streamlit run your_app.py
 MIT License
 
 ## Credits
+
+This project is based on [streamlit-quill](https://github.com/okld/streamlit-quill).
 
 Built with:
 - [Streamlit](https://streamlit.io/)

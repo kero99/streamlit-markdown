@@ -12,6 +12,8 @@ streamlit-quill/
 # Distribution / packaging
 .Python
 build/
+!streamlit_markdown/frontend/build/
+!streamlit_markdown/frontend/build/**
 develop-eggs/
 dist/
 downloads/

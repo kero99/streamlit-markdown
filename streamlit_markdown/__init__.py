@@ -23,6 +23,12 @@ if not _RELEASE:
 else:
     parent_dir = os.path.dirname(os.path.abspath(__file__))
     build_dir = os.path.join(parent_dir, "frontend/build")
+    if not os.path.isdir(build_dir):
+        raise FileNotFoundError(
+            "streamlit_markdown frontend build not found. "
+            "If you installed from source, build the frontend and reinstall, "
+            "or install a release that includes the build artifacts."
+        )
     _st_markdown = components.declare_component("streamlit_markdown", path=build_dir)
 
 
