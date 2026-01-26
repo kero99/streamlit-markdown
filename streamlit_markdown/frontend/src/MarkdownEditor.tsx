@@ -99,30 +99,28 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
       const reader = new FileReader();
       reader.onload = () => {
         const base64Data = reader.result as string;
-        const timestamp = Date.now();
-        const placeholder = `![Uploading ${file.name}...](pending_${timestamp})`;
         
-        const imageData: ImageUploadData = {
-          data: base64Data,
-          filename: file.name,
-          placeholder: `pending_${timestamp}`,
-          mimeType: file.type,
-        };
+        // Always use base64 in the markdown for immediate preview
+        const markdownImage = `![${file.name}](${base64Data})`;
         
-        setPendingImages(prev => {
-          const updated = [...prev, imageData];
-          // Send update with new image
-          sendValueToStreamlit(content, updated);
-          return updated;
-        });
-        
-        // Return markdown placeholder
+        // If image upload is enabled, also send the image data to Python for saving
         if (imageUploadEnabled) {
-          resolve(placeholder);
-        } else {
-          // Embed as base64 if upload not enabled
-          resolve(`![${file.name}](${base64Data})`);
+          const imageData: ImageUploadData = {
+            data: base64Data,
+            filename: file.name,
+            placeholder: base64Data, // Use base64 as the placeholder to replace
+            mimeType: file.type,
+          };
+          
+          setPendingImages(prev => {
+            const updated = [...prev, imageData];
+            // Send update with new image
+            sendValueToStreamlit(content, updated);
+            return updated;
+          });
         }
+        
+        resolve(markdownImage);
       };
       reader.readAsDataURL(file);
     });
