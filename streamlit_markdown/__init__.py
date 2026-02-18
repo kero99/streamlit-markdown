@@ -9,9 +9,18 @@ import os
 import json
 import base64
 import hashlib
+import logging
 from pathlib import Path
 from typing import Optional, List, Union
 import streamlit.components.v1 as components
+
+logger = logging.getLogger(__name__)
+
+# --- Per-key caches to avoid redundant work across reruns ---
+# Fix 1: Cache base64 conversion results so images aren't re-read from disk every render
+_image_conversion_cache: dict = {}  # key -> (value_hash, converted_value)
+# Fix 2: Track last-sent defaultValue so we skip re-transmitting unchanged content
+_last_sent_default: dict = {}  # key -> value_hash
 
 _RELEASE = True
 
@@ -62,7 +71,8 @@ def st_markdown(
     preview_position: str = "right",
     image_upload_path: Optional[str] = None,
     readonly: bool = False,
-    debounce_ms: int = 300,
+    debounce_ms: int = 800,
+    max_content_size: Optional[int] = 200_000,
     key: Optional[str] = None
 ) -> dict:
     """
@@ -101,7 +111,11 @@ def st_markdown(
     readonly : bool
         Make the editor read-only. Default: False.
     debounce_ms : int
-        Debounce delay in milliseconds for value updates. Default: 300.
+        Debounce delay in milliseconds for value updates. Default: 800.
+        Higher values reduce reruns and improve performance for large documents.
+    max_content_size : int or None
+        Maximum content size in bytes before a warning is logged.
+        Set to None to disable the check. Default: 200,000 (~200KB).
     key : str or None
         Unique key for this component instance.
 
@@ -115,12 +129,39 @@ def st_markdown(
     if toolbar is None:
         toolbar = DEFAULT_TOOLBAR.copy()
 
-    # Convert local image paths to base64 for preview display
-    preview_value = _convert_images_to_base64(value) if value else value
+    # --- Fix 5: Warn if content is very large ---
+    if max_content_size and value and len(value.encode("utf-8")) > max_content_size:
+        logger.warning(
+            "streamlit-markdown: content size (%d bytes) exceeds max_content_size "
+            "(%d bytes). Large documents with embedded images may cause performance "
+            "issues or WebSocket errors.",
+            len(value.encode("utf-8")),
+            max_content_size,
+        )
+
+    # --- Fix 1: Cache the base64 conversion result per key ---
+    cache_key = key or "__default__"
+    value_hash = hashlib.md5((value or "").encode("utf-8")).hexdigest()
+
+    cached = _image_conversion_cache.get(cache_key)
+    if cached and cached[0] == value_hash:
+        preview_value = cached[1]
+    else:
+        preview_value = _convert_images_to_base64(value) if value else value
+        _image_conversion_cache[cache_key] = (value_hash, preview_value)
+
+    # --- Fix 2: Only send defaultValue when it genuinely changes ---
+    last_hash = _last_sent_default.get(cache_key)
+    if last_hash == value_hash:
+        # Content hasn't changed from Python side — don't re-transmit
+        send_default = None
+    else:
+        send_default = preview_value
+        _last_sent_default[cache_key] = value_hash
 
     # Prepare component args
     component_args = {
-        "defaultValue": preview_value,
+        "defaultValue": send_default,
         "placeholder": placeholder,
         "height": height,
         "theme": theme,

@@ -42,7 +42,7 @@ export type PreviewPosition = "right" | "bottom" | "tab";
  * Component arguments passed from Python
  */
 export interface MarkdownEditorArgs {
-  defaultValue: string;
+  defaultValue: string | null;
   placeholder: string;
   height: number;
   theme: ThemeMode;

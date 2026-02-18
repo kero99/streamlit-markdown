@@ -41,11 +41,34 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
   const [previewVisible, setPreviewVisible] = useState<boolean>(showPreview);
   const [activeTab, setActiveTab] = useState<"editor" | "preview">("editor");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastDefaultValueRef = useRef<string | null>(defaultValue);
+
+  // Fix 2 (frontend): Only update content from defaultValue when it genuinely
+  // changes from the Python side. When Python sends null, it means "no change",
+  // so the editor keeps its own internal state.
+  useEffect(() => {
+    if (!isInitialized) {
+      // First mount: apply the initial defaultValue
+      if (defaultValue != null) {
+        setContent(defaultValue);
+        lastDefaultValueRef.current = defaultValue;
+      }
+      setIsInitialized(true);
+      return;
+    }
+
+    // Subsequent renders: only update if Python sent a non-null, changed value
+    if (defaultValue != null && defaultValue !== lastDefaultValueRef.current) {
+      setContent(defaultValue);
+      lastDefaultValueRef.current = defaultValue;
+    }
+  }, [defaultValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Detect Streamlit theme
   useEffect(() => {
@@ -85,6 +108,12 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
         images: images,
       };
       Streamlit.setComponentValue(componentValue);
+
+      // Fix 4: Clear pending images after they have been sent to Python,
+      // so they aren't re-transmitted on every subsequent keystroke.
+      if (images.length > 0) {
+        setPendingImages([]);
+      }
     }, debounceMs);
   }, [debounceMs]);
 
