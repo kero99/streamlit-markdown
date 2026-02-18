@@ -33,7 +33,7 @@ long_description = readme_path.read_text(encoding="utf-8") if readme_path.exists
 
 setuptools.setup(
     name="streamlit-markdown",
-    version="1.0.0",
+    version="1.1.0",
     author="Jungl3 SoC",
     author_email="",
     description="Markdown editor with live preview for Streamlit",
