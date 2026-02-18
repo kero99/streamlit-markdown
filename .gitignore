@@ -8,6 +8,13 @@ __pycache__/
 
 # References
 streamlit-quill/
+references/
+
+# Test files
+test_*.py
+*.test.tsx
+*.test.ts
+test_assets/
 
 # Distribution / packaging
 .Python

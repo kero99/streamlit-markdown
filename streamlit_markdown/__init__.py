@@ -249,8 +249,14 @@ def _save_image(base64_data: str, upload_path: str, filename: str) -> Optional[s
         file_path = upload_dir / unique_filename
         file_path.write_bytes(image_bytes)
         
-        # Return relative path for markdown
-        return str(file_path)
+        # Return relative path for markdown portability.
+        # Use the path relative to CWD so the markdown stays portable
+        # across different environments.
+        try:
+            return str(file_path.relative_to(Path.cwd()))
+        except ValueError:
+            # If the file is outside CWD, return as-is
+            return str(file_path)
         
     except Exception as e:
         print(f"Error saving image: {e}")

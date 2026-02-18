@@ -37,7 +37,6 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
 
   // State
   const [content, setContent] = useState<string>(defaultValue || "");
-  const [pendingImages, setPendingImages] = useState<ImageUploadData[]>([]);
   const [previewVisible, setPreviewVisible] = useState<boolean>(showPreview);
   const [activeTab, setActiveTab] = useState<"editor" | "preview">("editor");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
@@ -48,6 +47,12 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
   const editorRef = useRef<any>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastDefaultValueRef = useRef<string | null>(defaultValue);
+
+  // FIX: Use a ref for pending images so the debounced send always reads
+  // the latest value, regardless of which closure calls it.
+  // This eliminates the stale-closure race condition where onChange
+  // (captured before the paste) would overwrite the images with [].
+  const pendingImagesRef = useRef<ImageUploadData[]>([]);
 
   // Fix 2 (frontend): Only update content from defaultValue when it genuinely
   // changes from the Python side. When Python sends null, it means "no change",
@@ -97,31 +102,37 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
   }, [height]);
 
   // Debounced update to Streamlit
-  const sendValueToStreamlit = useCallback((value: string, images: ImageUploadData[]) => {
+  // FIX: No longer takes images as a parameter. Instead, reads from
+  // pendingImagesRef.current INSIDE the setTimeout callback, so it
+  // always gets the latest images regardless of closure staleness.
+  const sendValueToStreamlit = useCallback((value: string) => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
     
     debounceTimerRef.current = setTimeout(() => {
+      const images = pendingImagesRef.current;
       const componentValue: ComponentValue = {
         content: value,
         images: images,
       };
       Streamlit.setComponentValue(componentValue);
 
-      // Fix 4: Clear pending images after they have been sent to Python,
+      // Clear pending images after they have been sent to Python,
       // so they aren't re-transmitted on every subsequent keystroke.
       if (images.length > 0) {
-        setPendingImages([]);
+        pendingImagesRef.current = [];
       }
     }, debounceMs);
   }, [debounceMs]);
 
   // Handle content change
+  // FIX: No longer passes pendingImages — sendValueToStreamlit reads
+  // from the ref, so this callback is safe to call from stale closures.
   const handleChange = useCallback((value: string) => {
     setContent(value);
-    sendValueToStreamlit(value, pendingImages);
-  }, [pendingImages, sendValueToStreamlit]);
+    sendValueToStreamlit(value);
+  }, [sendValueToStreamlit]);
 
   // Handle image paste/drop
   const handleImageUpload = useCallback(async (file: File): Promise<string> => {
@@ -142,12 +153,10 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ args }) => {
             mimeType: file.type,
           };
           
-          setPendingImages(prev => {
-            const updated = [...prev, imageData];
-            // Send update with new image
-            sendValueToStreamlit(content, updated);
-            return updated;
-          });
+          // FIX: Update the ref directly (no stale closure issues)
+          pendingImagesRef.current = [...pendingImagesRef.current, imageData];
+          // Trigger a debounced send — setTimeout reads from ref
+          sendValueToStreamlit(content);
         }
         
         resolve(markdownImage);
