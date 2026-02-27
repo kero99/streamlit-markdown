@@ -19,8 +19,6 @@ logger = logging.getLogger(__name__)
 # --- Per-key caches to avoid redundant work across reruns ---
 # Fix 1: Cache base64 conversion results so images aren't re-read from disk every render
 _image_conversion_cache: dict = {}  # key -> (value_hash, converted_value)
-# Fix 2: Track last-sent defaultValue so we skip re-transmitting unchanged content
-_last_sent_default: dict = {}  # key -> value_hash
 
 _RELEASE = True
 
@@ -150,18 +148,15 @@ def st_markdown(
         preview_value = _convert_images_to_base64(value) if value else value
         _image_conversion_cache[cache_key] = (value_hash, preview_value)
 
-    # --- Fix 2: Only send defaultValue when it genuinely changes ---
-    last_hash = _last_sent_default.get(cache_key)
-    if last_hash == value_hash:
-        # Content hasn't changed from Python side — don't re-transmit
-        send_default = None
-    else:
-        send_default = preview_value
-        _last_sent_default[cache_key] = value_hash
+    # Always send defaultValue to the frontend. The React component already
+    # deduplicates via lastDefaultValueRef — re-sending the same value is a
+    # no-op. A module-level cache cannot know whether the frontend instance
+    # is new (session reset / browser refresh), so skipping the send risks
+    # leaving a brand-new editor empty.
 
     # Prepare component args
     component_args = {
-        "defaultValue": send_default,
+        "defaultValue": preview_value,
         "placeholder": placeholder,
         "height": height,
         "theme": theme,
